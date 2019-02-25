@@ -104,7 +104,7 @@ optional argument : setting file path (default : setting.json)
 }
 </code></pre>
 
-roles.["ROLENAME"].hostname is optional, it will use rolename if omitted
-roles.["ROLENAME"].password is optional, it will generate random password if omitted
+1. roles.["ROLENAME"].hostname is optional, it will use rolename if omitted
+2. roles.["ROLENAME"].password is optional, it will generate random password if omitted
 
 
