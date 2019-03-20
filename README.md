@@ -9,102 +9,104 @@ optional argument : setting file path (default : setting.json)
 
 
 ## setting.json
-<pre><code>
+```json
 {
   "vaultApi": "http://127.0.0.1:8200",
   "secrets": {
-    "dexKey": {
-      "seed": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    "dexSettings": {
+      "taskIdSeed": "DATA",
+      "signServerAddr": "DATA",
+      "signServerAppName": "DATA",
+      "signServerAppKey": "DATA"
     },
     "web-jwt": {
-      "secret": "SECRETSECRETSECRETSECRET",
-      "expiration": 604800000
+      "secret": "DATA",
+      "expiration": 1234
     },
     "redis": {
-      "host": "localhost",
-      "port": 6379
+      "host": "DATA",
+      "port": 1234
     },
     "mariadb": {
-      "username": "root",
-      "password": "PASSWORD",
-      "addr": "localhost",
-      "port": 3306,
-      "schema": "talken_db"
+      "username": "DATA",
+      "password": "DATA",
+      "addr": "DATA",
+      "port": 1234,
+      "schema": "DATA"
     },
     "toast-cloud": {
-      "appKey": "TOASTCLOUDAPPKEY"
+      "appKey": "DATA"
+    },
+    "java-mail": {
+      "user": "DATA",
+      "password": "DATA"
     },
     "coinmarketcap": {
-      "apiKey": "COINMARKETCAPAPPKEY"
+      "apiKey": "DATA"
     },
     "mongodb": {
-      "addr": "localhost",
-      "port": 2701,
-      "username": "USERNAME",
-      "password": "PASSWORD",
-      "authMechanism": "MECHANISM",
-      "authSource": "SOURCE"
+      "addr": "DATA",
+      "port": 1234,
+      "username": "DATA",
+      "password": "DATA",
+      "authMechanism": "DATA",
+      "authSource": "DATA"
     },
     "push-aos": {
-      "key": "value"
+      "key": "DATA"
     },
     "push-ios": {
-      "key": "value"
-    }
+      "key": "DATA"
+    },
+    "wdxPartnerKey" : {
+      "accessKey": "DATA"
+    },
+    "kakao_oauth" : {
+      "client_id": "DATA",
+      "client_secret": "DATA"
+    },
+    "telegram_oauth" : {
+      "client_id": "DATA",
+      "client_secret": "DATA"
+    },
+    "signserver-keymap" : null
   },
   "roles": {
     "tkn-web": {
-      "secret": [
-        "redis"
-      ],
-      "hostname": "tkn-web",
-      "password": "PASSWORD"
+      "secret": [ "redis", "wdxPartnerKey", "kakao_oauth", "telegram_oauth" ],
+      "password": "1234"
     },
     "tkn-cmu": {
-      "secret": [
-        "redis",
-        "mariadb",
-        "web-jwt",
-        "toast-cloud"
-      ]
+      "secret": [ "redis", "mariadb", "web-jwt", "toast-cloud", "java-mail" ],
+      "password": "1234"
     },
     "tkn-gov": {
-      "secret": [
-        "redis",
-        "mariadb",
-        "coinmarketcap"
-      ],
-      "password": "PASSWORD"
+      "secret": [ "redis", "mariadb", "coinmarketcap" ],
+      "password": "1234"
     },
     "tkn-dex": {
-      "secret": [
-        "redis",
-        "mariadb",
-        "dexKey",
-        "web-jwt"
-      ],
-      "password": "PASSWORD"
+      "secret": [ "redis", "mariadb", "dexSettings", "web-jwt", "signserver-keymap" ],
+      "password": "1234"
     },
     "tkn-anc": {
-      "secret": [
-        "redis",
-        "mariadb"
-      ],
-      "password": "PASSWORD"
+      "secret": [ "redis", "mariadb", "signserver-keymap" ],
+      "password": "1234"
     },
     "tkn-wdx": {
-      "secret": [
-        "mongodb",
-        "push-ios",
-        "push-aos"
-      ],
-      "password": "PASSWORD"
+      "secret": [ "mongodb", "push-ios", "push-aos" ],
+      "password": "1234"
     }
   }
 }
-</code></pre>
+```
 
-1. roles.["ROLENAME"].hostname is optional, it will use rolename if omitted
-2. roles.["ROLENAME"].password is optional, it will generate random password if omitted
+1. roles.["ROLENAME"].hostname is optional, it will use rolename if omitted.  
+both generated and given hostname will be served as hashed form
+2. roles.["ROLENAME"].password is optional, it will generate random password if omitted.  
+generated password will be 64byte long, and will generate new password everytime it runs  
+SO, if fixed password required, set first generated password in setting.json 
+3. secrets.["SECRETNAME"] can have null data as placeholder, actual secret entry will not created.
 
+
+**IT'S VERY DANGEROUS TO KEEP setting.json IN PRODUCTION ENVIRONMENT, setting.json MUST BE REMOVED AFTER USE**
 
