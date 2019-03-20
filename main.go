@@ -200,7 +200,7 @@ func makeAppRolePolicy(r string) {
 func makeAppRoleUser(r string, role Role) {
 	var password string
 	if role.Password == "" {
-		pass := make([]byte, 16)
+		pass := make([]byte, 32)
 		rand.Read(pass)
 		password = hex.EncodeToString(pass)
 	} else {
