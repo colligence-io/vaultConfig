@@ -99,12 +99,7 @@ optional argument : setting file path (default : setting.json)
 }
 ```
 
-1. roles.["ROLENAME"].hostname is optional, it will use rolename if omitted.  
-both generated and given hostname will be served as hashed form
-2. roles.["ROLENAME"].password is optional, it will generate random password if omitted.  
-generated password will be 64byte long, and will generate new password everytime it runs  
-SO, if fixed password required, set first generated password in setting.json 
-3. secrets.["SECRETNAME"] can have null data as placeholder, actual secret entry will not created.
+1. secrets.["SECRETNAME"] can have null data as placeholder, actual secret entry will not created.
 
 
 **IT'S VERY DANGEROUS TO KEEP setting.json IN PRODUCTION ENVIRONMENT, setting.json MUST BE REMOVED AFTER USE**

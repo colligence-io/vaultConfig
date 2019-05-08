@@ -23,7 +23,6 @@ type Setting struct {
 
 type Role struct {
 	Secret   []string `json:"secret"`
-	Hostname string   `json:"hostname"`
 	Password string   `json:"password"`
 }
 
@@ -109,6 +108,10 @@ func readSetting(filePath string) {
 			if !exists {
 				panic("for role " + r + " secret " + s + " is not found on secrets")
 			}
+		}
+
+		if v.Password == "" {
+			panic("for role " + r + " no password set")
 		}
 	}
 
@@ -197,7 +200,7 @@ func makeAppRolePolicy(r string) {
 	sendToVault("PUT", "sys/policy/approle-"+r+"-policy", kv)
 }
 
-func makeAppRoleUser(r string, role Role) {
+func makeAppRoleUser(rolename string, role Role) {
 	var password string
 	if role.Password == "" {
 		pass := make([]byte, 32)
@@ -207,24 +210,17 @@ func makeAppRoleUser(r string, role Role) {
 		password = role.Password
 	}
 
-	var hostname string
-	if role.Hostname != "" {
-		hostname = role.Hostname
-	} else {
-		hostname = r
-	}
-
 	h := sha256.New()
-	h.Write([]byte(hostname))
+	h.Write([]byte(rolename))
 	username := hex.EncodeToString(h.Sum(nil))
 
 	kv := make(map[string]string)
 	kv["password"] = password
 	kv["ttl"] = "5s"
 	kv["max_ttl"] = "5s"
-	kv["policies"] = "approle-" + r + "-policy"
+	kv["policies"] = "approle-" + rolename + "-policy"
 
 	sendToVault("POST", "auth/userpass/users/"+username, kv)
 
-	result = append(result, Result{rolename: r, username: username, password: password})
+	result = append(result, Result{rolename: rolename, username: username, password: password})
 }
